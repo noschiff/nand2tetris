@@ -16,11 +16,10 @@ public class Code {
     public static String comp(String mnemonic) {
         String a = mnemonic.contains("M") ? "1" : "0";
 
-        mnemonic = mnemonic.replace("M", "X");
-        mnemonic = mnemonic.replace("A", "X");
+        String general = mnemonic.replace("M", "X").replace("A", "X");
 
         String c = "000000";
-        switch (mnemonic) {
+        switch (general) {
             case "0":
                 c = "101010";
                 break;

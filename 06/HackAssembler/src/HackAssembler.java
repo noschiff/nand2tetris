@@ -1,19 +1,20 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class HackAssembler {
 
-    private String fileName;
     private File file;
     private String[] input;
     private SymbolTable symbolTable;
     private ArrayList<String> out;
 
-    public HackAssembler(String fileName) {
-        this.fileName = fileName;
-        this.file = new File(fileName);
+    public HackAssembler(String fileName) throws FileNotFoundException {
+        this(new File(fileName));
+    }
+
+    public HackAssembler(File file) throws FileNotFoundException {
+        this.file = file;
         this.out = new ArrayList<>();
         this.symbolTable = new SymbolTable();
         read();
@@ -24,27 +25,21 @@ public class HackAssembler {
         assemble2();
     }
 
-    private void read() {
+    private void read() throws FileNotFoundException {
         ArrayList<String> lines = new ArrayList<>();
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                int commentStart = line.indexOf("//");
-                if (commentStart > -1) {
-                    line = line.substring(0, commentStart);
-                }
-                line = line.trim();
-                if (!line.equals("")) {
-                    lines.add(line);
-                }
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            int commentStart = line.indexOf("//");
+            if (commentStart > -1) {
+                line = line.substring(0, commentStart);
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("invalid file");
-            System.exit(1);
+            line = line.trim();
+            if (!line.equals("")) {
+                lines.add(line);
+            }
         }
         input = lines.toArray(new String[0]);
-        System.out.println(Arrays.toString(input));
     }
 
     private void assemble1() {
@@ -85,23 +80,35 @@ public class HackAssembler {
                     value = Integer.valueOf(symbol);
                 }
 
-                out.add("0" + Code.binary(value));
+                out.add(Code.binary(value));
             }
             parser.advance();
         }
     }
 
-    public String print() {
-        String outputFile = file.getName().replaceAll("\\..*", "") + ".hack";
+//    public String print() {
+//        return print(file.getName().replaceAll("\\..*", "") + ".hack");
+//    }
+
+    public String getSuggestedOutputPath() {
+        String path = file.getAbsolutePath();
+        String newName = file.getName().replaceAll("\\..*", "") + ".hack";
+        return path.replace(file.getName(), newName);
+    }
+
+
+    public String print(File outputFile) {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
             for (String line : out) {
                 writer.println(line);
             }
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return outputFile;
+        return outputFile.getName();
     }
 
     public ArrayList<String> getOut() {
@@ -109,9 +116,17 @@ public class HackAssembler {
     }
 
     public static void main(String[] args) {
-        HackAssembler hackAssembler = new HackAssembler("/Users/noschiff/nand2tetris/projects/06/max/Max.asm");
-        hackAssembler.assemble();
-        System.out.println(hackAssembler.getOut());
+        HackAssembler hackAssembler;
+        try {
+            hackAssembler = new HackAssembler("/Users/noschiff/nand2tetris/projects/06/max/Max.asm");
+            hackAssembler.assemble();
+//            hackAssembler.print();
+
+            System.out.println(hackAssembler.file.getPath());
+            System.out.println(hackAssembler.file.getAbsolutePath());
+            System.out.println(hackAssembler.file.getName());
+        } catch (FileNotFoundException ignored) {
+        }
     }
 
 }
