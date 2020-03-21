@@ -9,10 +9,6 @@ public class HackAssembler {
     private SymbolTable symbolTable;
     private ArrayList<String> out;
 
-    public HackAssembler(String fileName) throws FileNotFoundException {
-        this(new File(fileName));
-    }
-
     public HackAssembler(File file) throws FileNotFoundException {
         this.file = file;
         this.out = new ArrayList<>();
@@ -86,10 +82,6 @@ public class HackAssembler {
         }
     }
 
-//    public String print() {
-//        return print(file.getName().replaceAll("\\..*", "") + ".hack");
-//    }
-
     public String getSuggestedOutputPath() {
         String path = file.getAbsolutePath();
         String newName = file.getName().replaceAll("\\..*", "") + ".hack";
@@ -113,20 +105,6 @@ public class HackAssembler {
 
     public ArrayList<String> getOut() {
         return out;
-    }
-
-    public static void main(String[] args) {
-        HackAssembler hackAssembler;
-        try {
-            hackAssembler = new HackAssembler("/Users/noschiff/nand2tetris/projects/06/max/Max.asm");
-            hackAssembler.assemble();
-//            hackAssembler.print();
-
-            System.out.println(hackAssembler.file.getPath());
-            System.out.println(hackAssembler.file.getAbsolutePath());
-            System.out.println(hackAssembler.file.getName());
-        } catch (FileNotFoundException ignored) {
-        }
     }
 
 }
