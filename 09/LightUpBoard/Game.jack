@@ -1,0 +1,80 @@
+class Game {
+  field Array r0, r1, r2;
+  static int size;
+
+  constructor Game new() {
+    let size = 85;
+    let r0 = Array.new(6);
+    let r1 = Array.new(6);
+    let r2 = Array.new(6);
+
+    let r0[0] = Tile.new(0*size,0*size,size);
+    let r0[1] = Tile.new(1*size,0*size,size);
+    let r0[2] = Tile.new(2*size,0*size,size);
+    let r0[3] = Tile.new(3*size,0*size,size);
+    let r0[4] = Tile.new(4*size,0*size,size);
+    let r0[5] = Tile.new(5*size,0*size,size);
+
+    let r1[0] = Tile.new(0*size,1*size,size);
+    let r1[1] = Tile.new(1*size,1*size,size);
+    let r1[2] = Tile.new(2*size,1*size,size);
+    let r1[3] = Tile.new(3*size,1*size,size);
+    let r1[4] = Tile.new(4*size,1*size,size);
+    let r1[5] = Tile.new(5*size,1*size,size);
+
+    let r2[0] = Tile.new(0*size,2*size,size);
+    let r2[1] = Tile.new(1*size,2*size,size);
+    let r2[2] = Tile.new(2*size,2*size,size);
+    let r2[3] = Tile.new(3*size,2*size,size);
+    let r2[4] = Tile.new(4*size,2*size,size);
+    let r2[5] = Tile.new(5*size,2*size,size);
+
+    return this;
+  }
+
+  method void dispose() {
+     do square.dispose();
+     do Memory.deAlloc(this);
+     return;
+  }
+
+  method void run() {
+     var char key;  // the key currently pressed by the user
+     var boolean exit;
+     let exit = false;
+
+     while (~exit) {
+        // waits for a key to be pressed
+        let key = Keyboard.keyPressed();
+
+        if (key = 81)  { do light(r0[0]); }
+        if (key = 87)  { do light(r0[1]); }
+        if (key = 69)  { do light(r0[2]); }
+        if (key = 82)  { do light(r0[3]); }
+        if (key = 84)  { do light(r0[4]); }
+        if (key = 89)  { do light(r0[5]); }
+
+        if (key = 65)  { do light(r1[0]); }
+        if (key = 83)  { do light(r1[1]); }
+        if (key = 68)  { do light(r1[2]); }
+        if (key = 70)  { do light(r1[3]); }
+        if (key = 71)  { do light(r1[4]); }
+        if (key = 72)  { do light(r1[5]); }
+
+        if (key = 90)  { do light(r2[0]); }
+        if (key = 88)  { do light(r2[1]); }
+        if (key = 67)  { do light(r2[2]); }
+        if (key = 86)  { do light(r2[3]); }
+        if (key = 66)  { do light(r2[4]); }
+        if (key = 78)  { do light(r2[5]); }
+
+        if (key = 0) { do Screen.clearScreen(); }
+    } // while
+    return;
+  }
+
+  method void light(Tile tile) {
+    do tile.draw();
+    return;
+  }
+}
