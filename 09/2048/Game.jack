@@ -1,0 +1,93 @@
+class Game {
+  field Tile UL, UM, UR, ML, MM, MR, DL, DM, DR;
+
+  constructor Game new() {
+    var int size;
+    let size = 80;
+    let UL = Tile.new(0,0,0,size);
+    let UM = Tile.new(0,size,0,size);
+    let UR = Tile.new(0,size+size,0,size);
+    let ML = Tile.new(2,0,size,size);
+    let MM = Tile.new(2,size,size,size);
+    let MR = Tile.new(0,size+size,size,size);
+    let DL = Tile.new(2,0,size+size,size);
+    let DM = Tile.new(0,size,size+size,size);
+    let DR = Tile.new(2,size+size,size+size,size);
+    return this;
+  }
+
+  method void dispose() {
+     do square.dispose();
+     do Memory.deAlloc(this);
+     return;
+  }
+
+  method void run() {
+     var char key;  // the key currently pressed by the user
+     var boolean exit;
+     let exit = false;
+
+     while (~exit) {
+
+       do drawAll();
+        // waits for a key to be pressed
+        let key = Keyboard.keyPressed();
+
+        if (key = 81)  { let exit = true; }     // q key
+        if (key = 131) { do up(); do unMergeAll(); }   // up arrow
+        //if (key = 133) { do down(); do unMergeAll(); }   // down arrow
+        //if (key = 130) { do left(); do unMergeAll(); }   // left arrow
+        //if (key = 132) { do right(); do unMergeAll(); }   // right arrow
+    } // while
+    return;
+  }
+
+  method void up() {
+    var boolean state;
+    let state = UL.canMergeWith(ML);
+    if (state) {
+      do UL.double();
+      do ML.takeValueOf(DL);
+      do DL.del();
+    } else {
+      let state = UL.doesNotExist() & ~ML.doesNotExist();
+      if (state) {
+        do UL.takeValueOf(ML);
+        do ML.takeValueOf(DL);
+        do DL.del();
+      }
+      let state = UL.doesNotExist() & ML.doesNotExist();
+        if (state) {
+          do UL.takeValueOf(DL);
+          do DL.del();
+        }
+    }
+    return;
+  }
+
+  method void drawAll() {
+    do UL.draw();
+    do UM.draw();
+    do UR.draw();
+    do ML.draw();
+    do MM.draw();
+    do MR.draw();
+    do DL.draw();
+    do DM.draw();
+    do DR.draw();
+    return;
+  }
+
+  method void unMergeAll() {
+    do UL.setMerge(false);
+    do UM.setMerge(false);
+    do UR.setMerge(false);
+    do ML.setMerge(false);
+    do MM.setMerge(false);
+    do MR.setMerge(false);
+    do DL.setMerge(false);
+    do DM.setMerge(false);
+    do DR.setMerge(false);
+    return;
+  }
+}

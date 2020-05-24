@@ -1,0 +1,62 @@
+class Tile {
+  field int value;
+  field int x, y;
+  field boolean merged;
+  static int size;
+  static int offset;
+
+  constructor Tile new (int Avalue, int Ax, int Ay, int Asize) {
+    let value = Avalue;
+    let x = Ax;
+    let y = Ay;
+    let merged = false;
+    let size = Asize;
+    let offset = size/2
+    return this;
+  }
+
+  method void dispose() {
+     do Memory.deAlloc(this);
+     return;
+  }
+
+  method void setMerge(boolean bool) {
+    let merged = bool;
+  }
+
+  method boolean getMerged() { return merged; }
+
+  method void double() {
+    let value = value * 2;
+    return;
+  }
+
+  method void draw() {
+    if (~(value = 0)) {
+     do Screen.setColor(true);
+     do Screen.drawRectangle(x, y, x + size, y + size);
+     do Output.moveCursor((y+offset)/11, (x+offset)/8);
+     do Output.printInt(value);
+   }
+     return;
+  }
+
+  method void del() {
+    let value = 0;
+    return;
+  }
+
+  method boolean canMergeWith(Tile other) {
+    return value = other.value;
+  }
+
+  method void takeValueOf(Tile other) {
+    let value = other.value;
+    return;
+  }
+
+  method boolean doesNotExist( {
+    return value = 0;
+  }
+
+}
