@@ -33,9 +33,11 @@ class Game {
   }
 
   method void dispose() {
-     do square.dispose();
-     do Memory.deAlloc(this);
-     return;
+    do r0.dispose();
+    do r1.dispose();
+    do r2.dispose();
+    do Memory.deAlloc(this);
+    return;
   }
 
   method void run() {
